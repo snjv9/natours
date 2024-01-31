@@ -69,7 +69,6 @@ exports.getTourStats = async (req, res) => {
 exports.getMonthlyPlan = async (req, res) => {
     try {
         const year = req.params.year * 1;
-        console.log(year)
         const plan = await Tour.aggregate([
             {
                 $unwind: '$startDates'

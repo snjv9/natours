@@ -14,6 +14,7 @@ const xss = require('xss-clean')
 const hpp = require('hpp')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const compression = require('compression')
 const app = express()
 
 app.set('view engine', 'pug')
@@ -59,6 +60,7 @@ app.use(hpp({
     whitelist: ['duration', 'ratingsQuantity', 'ratingsAverage', 'maxGroupSize', 'difficulty', 'price']
 }))
 
+app.use(compression())
 //using custom global middleware
 app.use((req, res, next) => {
     const requestTime = new Date().toISOString();
@@ -74,7 +76,11 @@ app.use('/api/v1/tours', tourRouter);
 app.use('/api/v1/users', userRouter);
 app.use('/api/v1/reviews', reviewRouter);
 app.all('*', (req, res, next) => {
-    next(new AppError(`Can't find ${req.originalUrl} on the server.`, 404))
+    if (req.originalUrl === '/bundle.js.map') {
+        next()
+    } else {
+        next(new AppError(`Can't find ${req.originalUrl} on the server.`, 404))
+    }
 })
 app.use(globalErrorHandler)
 module.exports = app

@@ -75,7 +75,6 @@ userSchema.methods.correctPassword = async function (candidatePassword, userPass
 userSchema.methods.changePasswordAfter = function (JWTtimestamp) {
     if (this.passwordChangeAt) {
         const changedTimestamp = parseInt(this.passwordChangeAt.getTime() / 1000, 10)
-        console.log(changedTimestamp, JWTtimestamp)
         return JWTtimestamp < changedTimestamp;
     }
     //FALSE means not changed
@@ -86,7 +85,6 @@ userSchema.methods.createPasswordResetToken = function () {
     const resetToken = crypto.randomBytes(32).toString('hex');
     this.passwordResetToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     this.passwordResetExpires = Date.now() + 600000;
-    console.log(resetToken, this.passwordResetToken)
     return resetToken;
 }
 const User = mongoose.model('User', userSchema);
