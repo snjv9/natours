@@ -36,7 +36,7 @@ const sendErrorDev = (err, req, res) => {
 
 }
 
-const sendErrorProd = (err, res) => {
+const sendErrorProd = (err, req, res) => {
     //Operational Error 
     //console.log(err)
     // A) API
@@ -100,7 +100,7 @@ module.exports = (err, req, res, next) => {
         if (error.name === 'TokenExpiredError') {
             error = handleJWTExpiredError(error);
         }
-        sendErrorProd(error, res);
+        sendErrorProd(error, req, res);
     }
 
 }
